@@ -1,4 +1,5 @@
 const http = require('http');
+const fs = require('fs');
 const articles = require('./articles');
 
 const hostname = '127.0.0.1';
@@ -71,4 +72,10 @@ function arRead(req, res, payload, cb) {
   });
 
   cb(null, found);
+}
+
+function arCreate(req, res, payload, cb) {
+  articles.push(payload);
+  
+  cb(null, result);
 }
