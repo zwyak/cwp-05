@@ -1,0 +1,39 @@
+[{
+		"id": 1,
+		"title": "Article 1",
+		"text": "Example 1",
+		"date": 0,
+		"author": "Vlad Senyuk",
+		"comments": [{
+				"id": 1,
+				"articleId": 1,
+				"text": "Comment 1",
+				"date": 0,
+				"author": "No name"
+			},
+			{
+				"id": 2,
+				"articleId": 1,
+				"text": "Comment 2",
+				"date": 0,
+				"author": "Vlad Senyuk"
+			}
+		]
+	},
+
+	{
+		"id": 2,
+		"title": "Article 2",
+		"text": "Example 2",
+		"date": 0,
+		"author": "Node Js",
+		"comments": [{
+			"id": 1,
+			"articleId": 2,
+			"text": "Comment 1",
+			"date": 0,
+			"author": "Vlad Senyuk"
+		}]
+	}
+
+]
