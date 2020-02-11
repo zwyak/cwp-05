@@ -5,8 +5,8 @@ const hostname = '127.0.0.1';
 const port = 3000;
 
 const handlers = {
-  '/api/articles/readall' : arReadAll
-  //'/api/articles/read' : arRead,
+  '/api/articles/readall' : arReadAll,
+  '/api/articles/read' : arRead
   //'/api/articles/create': arCreate,
   //'/api/articles/update': arUpdate,
   //'/api/articles/delete': arDelete,
@@ -63,4 +63,12 @@ function parseBodyJson(req, cb) {
 function arReadAll(req, res, payload, cb) {
   const result = articles;
   cb(null, result);
+}
+
+function arRead(req, res, payload, cb) {
+  let found = articles.find( (element)=> {
+    return element.id = payload.id;
+  });
+
+  cb(null, found);
 }
