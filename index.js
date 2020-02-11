@@ -1,10 +1,17 @@
 const http = require('http');
+const articles = require('./articles');
 
 const hostname = '127.0.0.1';
 const port = 3000;
 
 const handlers = {
-  '/sum': sum
+  '/api/articles/readall' : arReadAll
+  //'/api/articles/read' : arRead,
+  //'/api/articles/create': arCreate,
+  //'/api/articles/update': arUpdate,
+  //'/api/articles/delete': arDelete,
+  //'/api/comments/create': comCreate,
+  //'/api/comments/delete': comDelete
 };
 
 const server = http.createServer((req, res) => {
@@ -35,12 +42,6 @@ function getHandler(url) {
   return handlers[url] || notFound;
 }
 
-function sum(req, res, payload, cb) {
-  const result = { c: payload.a + payload.b };
-
-  cb(null, result);
-}
-
 function notFound(req, res, payload, cb) {
   cb({ code: 404, message: 'Not found'});
 }
@@ -57,4 +58,9 @@ function parseBodyJson(req, cb) {
 
     cb(null, params);
   });
+}
+
+function arReadAll(req, res, payload, cb) {
+  const result = articles;
+  cb(null, result);
 }
