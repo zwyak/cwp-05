@@ -11,8 +11,8 @@ const handlers = {
   '/api/articles/create': arCreate,
   '/api/articles/update': arUpdate,
   '/api/articles/delete': arDelete,
-  '/api/comments/create': comCreate
-  //'/api/comments/delete': comDelete
+  '/api/comments/create': comCreate,
+  '/api/comments/delete': comDelete
 };
 
 const server = http.createServer((req, res) => {
@@ -154,6 +154,44 @@ function comCreate(req, res, payload, cb) {
     writeJson('./articles.json', JSON.stringify(articles));
     articles = require('./articles.json');
     cb(null, result);
+  }else{
+    cb(null, {status:-1});
+  }
+
+}
+
+function comDelete(req, res, payload, cb) {
+  let foundArticle;
+
+  for (var i = 0; i < articles.length; i++) {
+    if (articles[i].id == payload.articleId){
+      foundArticle = articles[i];
+      break;
+    }
+  }
+
+  let foundCommentIndex;
+  if (foundArticle){
+    for (var i = 0; i < foundArticle.comments.length; i++) {
+      if (foundArticle.comments[i].id == payload.id){
+        foundCommentIndex = foundArticle.comments.indexOf(foundArticle.comments[i]);
+        foundArticle.comments.splice(foundCommentIndex, 1);
+        break;
+      }
+    }
+  }
+
+  for (var i = 0; i < articles.length; i++) {
+    if (articles[i].id == payload.articleId){
+      articles[i] = foundArticle;
+      break;
+    }
+  }
+
+  if (foundCommentIndex){
+    writeJson('./articles.json', JSON.stringify(articles));
+    articles = require('./articles.json');
+    cb(null, foundArticle);
   }else{
     cb(null, {status:-1});
   }
