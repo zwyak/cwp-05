@@ -8,8 +8,8 @@ const port = 3000;
 const handlers = {
   '/api/articles/readall' : arReadAll,
   '/api/articles/read' : arRead,
-  '/api/articles/create': arCreate
-  //'/api/articles/update': arUpdate,
+  '/api/articles/create': arCreate,
+  '/api/articles/update': arUpdate
   //'/api/articles/delete': arDelete,
   //'/api/comments/create': comCreate,
   //'/api/comments/delete': comDelete
@@ -94,13 +94,18 @@ function arUpdate(req, res, payload, cb) {
   for (var i = 0; i < articles.length; i++) {
     if (articles[i].id == payload.id){
       found = articles[i];
+
+      if (payload.title) found.title = payload.title;
+      if (payload.text) found.text = payload.text;
+      if (payload.author) found.author = payload.author;
+
+      articles[i] = found;
       break;
     }
-  }
 
-  if (payload.title) found.title = payload.title;
-  if (payload.text) found.text = payload.text;
-  found
+    writeJson('./articles.json', JSON.stringify(articles));
+    articles = require('./articles.json');
+  }
 
   cb(null, found);
 }
