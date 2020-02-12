@@ -1,6 +1,6 @@
 const http = require('http');
 const fs = require('fs');
-const articles = require('./articles');
+let articles = require('./articles');
 
 const hostname = '127.0.0.1';
 const port = 3000;
@@ -102,10 +102,10 @@ function arUpdate(req, res, payload, cb) {
       articles[i] = found;
       break;
     }
-
-    writeJson('./articles.json', JSON.stringify(articles));
-    articles = require('./articles.json');
   }
+
+  writeJson('./articles.json', JSON.stringify(articles));
+  articles = require('./articles.json');
 
   cb(null, found);
 }
