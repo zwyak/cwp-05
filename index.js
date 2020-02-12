@@ -9,8 +9,8 @@ const handlers = {
   '/api/articles/readall' : arReadAll,
   '/api/articles/read' : arRead,
   '/api/articles/create': arCreate,
-  '/api/articles/update': arUpdate
-  //'/api/articles/delete': arDelete,
+  '/api/articles/update': arUpdate,
+  '/api/articles/delete': arDelete
   //'/api/comments/create': comCreate,
   //'/api/comments/delete': comDelete
 };
@@ -103,6 +103,25 @@ function arUpdate(req, res, payload, cb) {
       break;
     }
   }
+
+  writeJson('./articles.json', JSON.stringify(articles));
+  articles = require('./articles.json');
+
+  cb(null, found);
+}
+
+function arDelete(req, res, payload, cb) {
+  let found;
+
+  for (var i = 0; i < articles.length; i++) {
+    if (articles[i].id == payload.id){
+      found = articles[i];
+      break;
+    }
+  }
+
+  const index = articles.indexOf(found);
+  articles.splice(index, 1);
 
   writeJson('./articles.json', JSON.stringify(articles));
   articles = require('./articles.json');
