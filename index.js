@@ -104,10 +104,13 @@ function arUpdate(req, res, payload, cb) {
     }
   }
 
-  writeJson('./articles.json', JSON.stringify(articles));
-  articles = require('./articles.json');
-
-  cb(null, found);
+  if (found){
+    writeJson('./articles.json', JSON.stringify(articles));
+    articles = require('./articles.json');
+    cb(null, found);
+  }else{
+    cb(null, {status:-1});
+  }
 }
 
 function arDelete(req, res, payload, cb) {
@@ -120,13 +123,17 @@ function arDelete(req, res, payload, cb) {
     }
   }
 
-  const index = articles.indexOf(found);
-  articles.splice(index, 1);
+  if (found){
+    const index = articles.indexOf(found);
+    articles.splice(index, 1);
 
-  writeJson('./articles.json', JSON.stringify(articles));
-  articles = require('./articles.json');
+    writeJson('./articles.json', JSON.stringify(articles));
+    articles = require('./articles.json');
+    cb(null, found);
+  }else{
+    cb(null, {status:-1});
+  }
 
-  cb(null, found);
 }
 
 function writeJson(file, data){
