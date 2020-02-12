@@ -7,8 +7,8 @@ const port = 3000;
 
 const handlers = {
   '/api/articles/readall' : arReadAll,
-  '/api/articles/read' : arRead
-  //'/api/articles/create': arCreate,
+  '/api/articles/read' : arRead,
+  '/api/articles/create': arCreate
   //'/api/articles/update': arUpdate,
   //'/api/articles/delete': arDelete,
   //'/api/comments/create': comCreate,
@@ -62,20 +62,56 @@ function parseBodyJson(req, cb) {
 }
 
 function arReadAll(req, res, payload, cb) {
-  const result = articles;
-  cb(null, result);
+  cb(null, articles);
 }
 
 function arRead(req, res, payload, cb) {
-  let found = articles.find( (element)=> {
-    return element.id = payload.id;
-  });
+  let found;
+
+  for (var i = 0; i < articles.length; i++) {
+    if (articles[i].id == payload.id){
+      found = articles[i];
+      break;
+    }
+  }
 
   cb(null, found);
 }
 
 function arCreate(req, res, payload, cb) {
-  articles.push(payload);
-  
+  const id = Date.now();
+  const result = {id:id, title:payload.title, text:payload.text, date: Date.now(), author: payload.author, comments: []};
+  articles.push(result);
+  writeJson('./articles.json', JSON.stringify(articles));
+  articles = require('./articles.json');
+
   cb(null, result);
+}
+
+function arUpdate(req, res, payload, cb) {
+  let found;
+
+  for (var i = 0; i < articles.length; i++) {
+    if (articles[i].id == payload.id){
+      found = articles[i];
+      break;
+    }
+  }
+
+  if (payload.title) found.title = payload.title;
+  if (payload.text) found.text = payload.text;
+  found
+
+  cb(null, found);
+}
+
+function writeJson(file, data){
+  fs.writeFile(file, data, 'utf8', function (err) {
+    if (err) {
+        console.log("An error occured while writing JSON Object to File.");
+        return console.log(err);
+    }
+
+    console.log("JSON file has been saved.");
+});
 }
