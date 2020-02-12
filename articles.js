@@ -1,14 +1,21 @@
 const fs = require('fs');
 const utils = require('./utils.js');
 let articles = require('./articles.json');
+const log4js = require('log4js');
+
+const logger = log4js.getLogger();
+logger.level = 'debug';
 
 function arReadAll(req, res, payload, cb) {
+  logger.debug("api/articles/readAll");
   cb(null, articles);
 }
 
 module.exports.arReadAll = arReadAll
 
 function arRead(req, res, payload, cb) {
+  logger.debug("api/articles/read");
+
   let found;
 
   for (var i = 0; i < articles.length; i++) {
@@ -24,6 +31,7 @@ function arRead(req, res, payload, cb) {
 module.exports.arRead = arRead
 
 function arCreate(req, res, payload, cb) {
+  logger.debug("api/articles/create");
   const id = Date.now();
   const result = {id:id, title:payload.title, text:payload.text, date: Date.now(), author: payload.author, comments: []};
 
@@ -44,6 +52,7 @@ function arCreate(req, res, payload, cb) {
 module.exports.arCreate = arCreate
 
 function arUpdate(req, res, payload, cb) {
+  logger.debug("api/articles/update");
   let found;
 
   for (var i = 0; i < articles.length; i++) {
@@ -71,6 +80,7 @@ function arUpdate(req, res, payload, cb) {
 module.exports.arUpdate = arUpdate
 
 function arDelete(req, res, payload, cb) {
+  logger.debug("api/articles/delete");
   let found;
 
   for (var i = 0; i < articles.length; i++) {
