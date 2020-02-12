@@ -22,9 +22,9 @@ function comCreate(req, res, payload, cb) {
   }
 
   if (found){
+    cb(null, result);
     utils.writeJson('./articles.json', JSON.stringify(articles));
     articles = require('./articles.json');
-    cb(null, result);
   }else{
     cb(null, { code: 400, message: "Request invalid"});
   }
@@ -64,9 +64,9 @@ function comDelete(req, res, payload, cb) {
   }
 
   if (foundCommentIndex){
+    cb(null, foundArticle);
     utils.writeJson('./articles.json', JSON.stringify(articles));
     articles = require('./articles.json');
-    cb(null, foundArticle);
   }else{
     cb(null, { code: 400, message: "Request invalid"});
   }

@@ -33,10 +33,12 @@ function arCreate(req, res, payload, cb) {
   }
 
   articles.push(result);
+
+  cb(null, result);
+
   utils.writeJson('./articles.json', JSON.stringify(articles));
   articles = require('./articles.json');
 
-  cb(null, result);
 }
 
 module.exports.arCreate = arCreate
@@ -58,9 +60,9 @@ function arUpdate(req, res, payload, cb) {
   }
 
   if (found){
+    cb(null, found);
     utils.writeJson('./articles.json', JSON.stringify(articles));
     articles = require('./articles.json');
-    cb(null, found);
   }else{
     cb(null, { code: 400, message: "Request invalid"});
   }
@@ -82,9 +84,9 @@ function arDelete(req, res, payload, cb) {
     const index = articles.indexOf(found);
     articles.splice(index, 1);
 
+    cb(null, found);
     utils.writeJson('./articles.json', JSON.stringify(articles));
     articles = require('./articles.json');
-    cb(null, found);
   }else{
     cb(null, { code: 400, message: "Request invalid"});
   }
