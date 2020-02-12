@@ -10,8 +10,8 @@ const handlers = {
   '/api/articles/read' : arRead,
   '/api/articles/create': arCreate,
   '/api/articles/update': arUpdate,
-  '/api/articles/delete': arDelete
-  //'/api/comments/create': comCreate,
+  '/api/articles/delete': arDelete,
+  '/api/comments/create': comCreate
   //'/api/comments/delete': comDelete
 };
 
@@ -130,6 +130,30 @@ function arDelete(req, res, payload, cb) {
     writeJson('./articles.json', JSON.stringify(articles));
     articles = require('./articles.json');
     cb(null, found);
+  }else{
+    cb(null, {status:-1});
+  }
+
+}
+
+function comCreate(req, res, payload, cb) {
+  const id = Date.now();
+  const result = {id: id, articleId: payload.articleId, text:payload.text, date: Date.now(), author: payload.author};
+  let found;
+
+  for (var i = 0; i < articles.length; i++) {
+    if (articles[i].id == payload.articleId){
+      found = articles[i];
+      found.comments.push(result);
+      articles[i] = found;
+      break;
+    }
+  }
+
+  if (found){
+    writeJson('./articles.json', JSON.stringify(articles));
+    articles = require('./articles.json');
+    cb(null, result);
   }else{
     cb(null, {status:-1});
   }
