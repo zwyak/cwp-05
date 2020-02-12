@@ -81,6 +81,12 @@ function arRead(req, res, payload, cb) {
 function arCreate(req, res, payload, cb) {
   const id = Date.now();
   const result = {id:id, title:payload.title, text:payload.text, date: Date.now(), author: payload.author, comments: []};
+
+  if (!payload.title || !payload.text || !payload.author){
+    cb(null, { code: 400, message: "Request invalid"});
+    return;
+  }
+
   articles.push(result);
   writeJson('./articles.json', JSON.stringify(articles));
   articles = require('./articles.json');
@@ -109,7 +115,7 @@ function arUpdate(req, res, payload, cb) {
     articles = require('./articles.json');
     cb(null, found);
   }else{
-    cb(null, {status:-1});
+    cb(null, { code: 400, message: "Request invalid"});
   }
 }
 
@@ -131,7 +137,7 @@ function arDelete(req, res, payload, cb) {
     articles = require('./articles.json');
     cb(null, found);
   }else{
-    cb(null, {status:-1});
+    cb(null, { code: 400, message: "Request invalid"});
   }
 
 }
@@ -140,6 +146,11 @@ function comCreate(req, res, payload, cb) {
   const id = Date.now();
   const result = {id: id, articleId: payload.articleId, text:payload.text, date: Date.now(), author: payload.author};
   let found;
+
+  if (!payload.articleId || !payload.text || !payload.author){
+    cb(null, { code: 400, message: "Request invalid"});
+    return;
+  }
 
   for (var i = 0; i < articles.length; i++) {
     if (articles[i].id == payload.articleId){
@@ -155,7 +166,7 @@ function comCreate(req, res, payload, cb) {
     articles = require('./articles.json');
     cb(null, result);
   }else{
-    cb(null, {status:-1});
+    cb(null, { code: 400, message: "Request invalid"});
   }
 
 }
@@ -181,10 +192,12 @@ function comDelete(req, res, payload, cb) {
     }
   }
 
-  for (var i = 0; i < articles.length; i++) {
-    if (articles[i].id == payload.articleId){
-      articles[i] = foundArticle;
-      break;
+  if (foundCommentIndex){
+    for (var i = 0; i < articles.length; i++) {
+      if (articles[i].id == payload.articleId){
+        articles[i] = foundArticle;
+        break;
+      }
     }
   }
 
@@ -193,7 +206,7 @@ function comDelete(req, res, payload, cb) {
     articles = require('./articles.json');
     cb(null, foundArticle);
   }else{
-    cb(null, {status:-1});
+    cb(null, { code: 400, message: "Request invalid"});
   }
 
 }
